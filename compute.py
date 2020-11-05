@@ -1,6 +1,7 @@
 import sys
 import re
 import urllib.request
+from bs4 import BeautifulSoup
 
 """
 Check for version of Python and exit with error when version is older than 3
@@ -29,7 +30,19 @@ def get_content(url):
 
 def main():
     check_version()
-    print(get_content('https://transphoto.org/list.php?serv=0&cid=54&mid=1'))
+    soup = BeautifulSoup(
+        get_content('https://transphoto.org/list.php?t=1&cid=54&sort=built&serv=0'),
+        'lxml')
+
+    table = soup.find('table', {'class': 'p20w'})
+    if not table:
+        sys.exit("Can't find table")
+
+    rows = table.find_all('tr')
+    for row in rows:
+        cells = rows.find('td')
+        print(cells)
+
 
 if __name__ == '__main__':
     main()
