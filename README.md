@@ -5,6 +5,15 @@ List of passenger vehicles is available at https://transphoto.org/list.php?serv=
 
 This program fetches data from specified web page and then make some statistical computation.
 
+## Preparing
+
+```bash
+sudo apt install pip3-venv
+python3 -m venv env
+. env/bin/activate
+pip install lxml bs4
+```
+
 ## See also
 
 * https://transphoto.org/list.php?serv=0&cid=54&mid=1
