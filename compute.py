@@ -2,6 +2,7 @@ import argparse
 import re
 import sys
 import urllib.request
+import yaml
 from urllib.parse import urljoin, urlencode
 from bs4 import BeautifulSoup
 
@@ -36,6 +37,9 @@ def main():
     total = 0
     title = ''
 
+    with open('config.yml') as file:
+        config = yaml.full_load(file)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--type',
                         help='transportation type (1-9 or name, default value is tram)',
@@ -45,25 +49,12 @@ def main():
                         default=1)
     args = parser.parse_args()
 
-    cities = {
-        'moscow':   1,
-        'москва':   1,
-        'msk':      1,
-        'мск':      1,
-        'chelyabinsk': 54,
-        'челябинск':   54,
-        'ekaterinburg':  55,
-        'yekaterinburg': 55,
-        'екатеринбург':  55,
-        'екб':           55,
-        'miass': 229,
-        'миасс': 229,
-    }
     city = args.city
 
     # try to guess id by name
     if re.match(r'\D', city):
-        city = cities[city.lower()]
+        cities = config.get('cities')
+        city = cities.get(city.lower(), cities['default'])
 
     kind = args.type
     # 1 tram, 2 trolleybus, 3 subway, 4 monorail, 5 funicular, 6 translohr
