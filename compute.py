@@ -32,6 +32,8 @@ def get_content(url):
 def main():
     check_version()
     trams = {}
+    total = 0
+    title = ''
 
     # TODO read from command line
     city = 54 # Chelyabinsk
@@ -48,6 +50,9 @@ def main():
 
         next_link = soup.find('a', attrs={'id': 'NextLink'})
         url = urljoin(url, next_link.get('href')) if next_link else None
+
+        if not title:
+            title = soup.find('h2').text
 
         # get tables wrapped by div.rtable
         tables = soup.find_all('div', attrs={'class': 'rtable'})
@@ -69,10 +74,17 @@ def main():
                 built = cells[3].text   # YYYY or mm.YYYY
                 year = built[-4:]       # drop month if exists
                 trams[year] = trams.get(year, 0) + 1
+                total += 1
 
     if trams:
+        print(title, '-' * len(title), sep='\n')
+
         for year in sorted(trams):
             print(year, trams[year], '#' * trams[year], sep='\t')
+
+        print('-' * 16)
+        print('Total', total, sep='\t')
+
     else:
         print('No data')
 
