@@ -80,10 +80,10 @@ def main():
         print(title, '-' * len(title), sep='\n')
 
         for year in sorted(trams):
-            print(year, trams[year], '#' * trams[year], sep='\t')
+            print('{:<4}  {:>6} {}'.format(year, trams[year], '#' * trams[year]))
 
-        print('-' * 16)
-        print('Total', total, sep='\t')
+        print('-' * 12) # year + gap + count
+        print('Total {:>6}'.format(total))
 
     else:
         print('No data')
