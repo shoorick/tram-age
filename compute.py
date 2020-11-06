@@ -41,26 +41,23 @@ def main():
         next_link = soup.find('a', attrs={'id': 'NextLink'})
         url = urljoin(url, next_link.get('href')) if next_link else None
 
-        # get first table wrapped by div.rtable
-        table = soup.find('div', attrs={'class': 'rtable'})
-        if not table:
-            continue
+        # get tables wrapped by div.rtable
+        tables = soup.find_all('div', attrs={'class': 'rtable'})
 
-        rows = table.find_all('tr')
-        if not rows:
-            continue
+        for table in tables:
+            rows = table.find_all('tr')
 
-        for row in rows:
-            cells = row.find_all('td')
-            if not cells:
-                continue
-                # header row doesn't contain any <td> cells
+            for row in rows:
+                cells = row.find_all('td')
+                if not cells:
+                    continue
+                    # header row doesn't contain any <td> cells
 
-            # passenger trams has 4-digit numbers
-            if len(cells[0].text) == 4:
-                built = cells[3].text   # YYYY or mm.YYYY
-                year = built[-4:]       # drop month if exists
-                trams[year] = trams.get(year, 0) + 1
+                # passenger trams has 4-digit numbers
+                if len(cells[0].text) == 4:
+                    built = cells[3].text   # YYYY or mm.YYYY
+                    year = built[-4:]       # drop month if exists
+                    trams[year] = trams.get(year, 0) + 1
 
     if trams:
         for year in sorted(trams):
