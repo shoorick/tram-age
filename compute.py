@@ -48,16 +48,19 @@ def main():
             rows = table.find_all('tr')
 
             for row in rows:
+                row_classes = row.get('class')
+                # suitable rows has class s1 or s11
+                if not ('s1' in row_classes or 's11' in row_classes):
+                    continue
+
                 cells = row.find_all('td')
                 if not cells:
                     continue
                     # header row doesn't contain any <td> cells
 
-                # passenger trams has 4-digit numbers
-                if len(cells[0].text) == 4:
-                    built = cells[3].text   # YYYY or mm.YYYY
-                    year = built[-4:]       # drop month if exists
-                    trams[year] = trams.get(year, 0) + 1
+                built = cells[3].text   # YYYY or mm.YYYY
+                year = built[-4:]       # drop month if exists
+                trams[year] = trams.get(year, 0) + 1
 
     if trams:
         for year in sorted(trams):
