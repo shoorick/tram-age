@@ -1,5 +1,6 @@
-import sys
+import argparse
 import re
+import sys
 import urllib.request
 from urllib.parse import urljoin, urlencode
 from bs4 import BeautifulSoup
@@ -35,10 +36,19 @@ def main():
     total = 0
     title = ''
 
-    # TODO read from command line
-    city = 54 # Chelyabinsk
-    kind =  1 # tram, 2 trolleybus, 3 subway, 4 monorail, 5 funicular, 6 translohr
-            # 7 mover, 8 maglev, 9 electic bus
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-t', '--type',
+                        help='transportation type (1-9 or name, default value is tram)',
+                        default=1)
+    parser.add_argument('-c', '--city',
+                        help='number or name (Chelyabinsk is default city)',
+                        default=54)
+    args = parser.parse_args()
+
+    city = args.city
+    kind = args.type
+    # 1 tram, 2 trolleybus, 3 subway, 4 monorail, 5 funicular, 6 translohr
+    # 7 mover, 8 maglev, 9 electic bus
     service = 0 # only for passengers
 
     url = urljoin(
