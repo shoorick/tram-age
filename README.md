@@ -1,9 +1,9 @@
-# Compute age of trams in Chelyabinsk
+# Compute age of trams in Russian cities
 
-Chelyabinsk is a big Russian city having large tram network (68 km) but the most of tram wagons are ancient.
-List of passenger vehicles is available at https://transphoto.org/list.php?serv=0&cid=54&mid=1
+The most of systems of public transportation in Russia uses ancient wagons.
+List of passenger vehicles by particular city is available at URL like https://transphoto.org/list.php?serv=0&cid=54&t=1, list of Russian cities available at https://transphoto.org/country/1/
 
-This program fetches data from specified web page and then make some statistical computation.
+This program fetches data for specified city and type of transportation and then make some statistical computation.
 
 ## Preparing
 
@@ -11,13 +11,15 @@ This program fetches data from specified web page and then make some statistical
 sudo apt install pip3-venv
 python3 -m venv env
 . env/bin/activate
-pip install lxml bs4
+pip install lxml bs4 pyyaml
 ```
 
-## Sample of output
+## Samples
+
+It's possible to use digital IDs
 
 ```
-$ python compute.py --city Miass --type 2
+$ python compute.py --city 229 --type 2
 Миасс, троллейбус
 -----------------
            3 ###
@@ -38,6 +40,22 @@ $ python compute.py --city Miass --type 2
 ------------
 Total     30
 ```
+
+or human readable names
+
+```
+$ time python compute.py --city Ekb --type metro
+Екатеринбург, метрополитен
+--------------------------
+1988       6 ######
+1989      39 #######################################
+2011       8 ########
+2019       8 ########
+------------
+Total     61
+```
+
+Names can be specified in English or in Russian.
 
 ## See also
 

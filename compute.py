@@ -50,15 +50,15 @@ def main():
     args = parser.parse_args()
 
     city = args.city
-
-    # try to guess id by name
     if re.match(r'\D', city):
+        # try to guess id by name
         cities = config.get('cities')
         city = cities.get(city.lower(), cities['default'])
 
     kind = args.type
-    # 1 tram, 2 trolleybus, 3 subway, 4 monorail, 5 funicular, 6 translohr
-    # 7 mover, 8 maglev, 9 electic bus
+    if re.match(r'\D', kind):
+        kinds = config.get('types')
+        kind = kinds.get(kind.lower(), kinds['default'])
 
     service = 0 # only for passengers
 

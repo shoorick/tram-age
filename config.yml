@@ -20,3 +20,35 @@ cities:
     ёбург:          55
     miass:         229
     миасс:         229
+
+types:
+    default:        1
+    трамвай:        1
+    троллейбус:     2
+    тм:             1
+    тб:             2
+    метрополитен:   3
+    метро:          3
+    монорельс:      4
+    фуникулёр:      5
+    фуникулер:      5
+    транслор:       6
+    мувер:          7
+    атн:            7
+    маглев:         8
+    электробус:     9
+    tram:           1
+    tramway:        1
+    trolleybus:     2
+    tm:             1
+    tb:             2
+    metro:          3
+    metropolitain:  3
+    subway:         3
+    underground:    4
+    monorail:       4
+    funicular:      5
+    translohr:      6
+    mover:          7
+    maglev:         8
+    'electic bus':  9
