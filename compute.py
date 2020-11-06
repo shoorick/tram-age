@@ -1,7 +1,7 @@
 import sys
 import re
 import urllib.request
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlencode
 from bs4 import BeautifulSoup
 
 """
@@ -33,7 +33,15 @@ def main():
     check_version()
     trams = {}
 
-    url = 'https://transphoto.org/list.php?t=1&cid=54&sort=built&serv=0'
+    # TODO read from command line
+    city = 54 # Chelyabinsk
+    kind =  1 # tram, 2 trolleybus, 3 subway, 4 monorail, 5 funicular, 6 translohr
+            # 7 mover, 8 maglev, 9 electic bus
+    service = 0 # only for passengers
+
+    url = urljoin(
+        'https://transphoto.org/list.php',
+        '?' + urlencode({'t': kind, 'cid': city, 'serv': service}))
 
     while url:
         soup = BeautifulSoup(get_content(url), 'lxml')
