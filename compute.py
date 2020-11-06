@@ -45,10 +45,25 @@ def main():
                         default=1)
     args = parser.parse_args()
 
+    cities = {
+        'moscow':   1,
+        'москва':   1,
+        'msk':      1,
+        'мск':      1,
+        'chelyabinsk': 54,
+        'челябинск':   54,
+        'ekaterinburg':  55,
+        'yekaterinburg': 55,
+        'екатеринбург':  55,
+        'екб':           55,
+        'miass': 229,
+        'миасс': 229,
+    }
     city = args.city
-    #  1 Moscow
-    # 54 Chelyabinsk
-    # 55 Ekaterinburg
+
+    # try to guess id by name
+    if re.match(r'\D', city):
+        city = cities[city.lower()]
 
     kind = args.type
     # 1 tram, 2 trolleybus, 3 subway, 4 monorail, 5 funicular, 6 translohr
