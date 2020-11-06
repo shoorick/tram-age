@@ -1,6 +1,7 @@
 import sys
 import re
 import urllib.request
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 
 """
@@ -30,35 +31,42 @@ def get_content(url):
 
 def main():
     check_version()
-    soup = BeautifulSoup(
-        get_content('https://transphoto.org/list.php?t=1&cid=54&sort=built&serv=0'),
-        'lxml')
-
-    # get first table wrapped by div.rtable
-    table = soup.find('div', attrs={'class': 'rtable'})
-    if not table:
-        sys.exit("Can't find table wrapper")
-
     trams = {}
 
-    rows = table.find_all('tr')
-    if not rows:
-        sys.exit("Can't find any rows")
+    url = 'https://transphoto.org/list.php?t=1&cid=54&sort=built&serv=0'
 
-    for row in rows:
-        cells = row.find_all('td')
-        if not cells:
+    while url:
+        soup = BeautifulSoup(get_content(url), 'lxml')
+
+        next_link = soup.find('a', attrs={'id': 'NextLink'})
+        url = urljoin(url, next_link.get('href')) if next_link else None
+
+        # get first table wrapped by div.rtable
+        table = soup.find('div', attrs={'class': 'rtable'})
+        if not table:
             continue
-            # header row doesn't contain any <td> cells
 
-        # passenger trams has 4-digit numbers
-        if len(cells[0].text) == 4:
-            built = cells[3].text   # YYYY or mm.YYYY
-            year = built[-4:]       # drop month if exists
-            trams[year] = trams.get(year, 0) + 1
+        rows = table.find_all('tr')
+        if not rows:
+            continue
 
-    for year in sorted(trams):
-        print(year, trams[year], '#' * trams[year], sep='\t')
+        for row in rows:
+            cells = row.find_all('td')
+            if not cells:
+                continue
+                # header row doesn't contain any <td> cells
+
+            # passenger trams has 4-digit numbers
+            if len(cells[0].text) == 4:
+                built = cells[3].text   # YYYY or mm.YYYY
+                year = built[-4:]       # drop month if exists
+                trams[year] = trams.get(year, 0) + 1
+
+    if trams:
+        for year in sorted(trams):
+            print(year, trams[year], '#' * trams[year], sep='\t')
+    else:
+        print('No data')
 
 
 if __name__ == '__main__':
