@@ -34,14 +34,31 @@ def main():
         get_content('https://transphoto.org/list.php?t=1&cid=54&sort=built&serv=0'),
         'lxml')
 
-    table = soup.find('table', {'class': 'p20w'})
+    # get first table wrapped by div.rtable
+    table = soup.find('div', attrs={'class': 'rtable'})
     if not table:
-        sys.exit("Can't find table")
+        sys.exit("Can't find table wrapper")
+
+    trams = {}
 
     rows = table.find_all('tr')
+    if not rows:
+        sys.exit("Can't find any rows")
+
     for row in rows:
-        cells = rows.find('td')
-        print(cells)
+        cells = row.find_all('td')
+        if not cells:
+            continue
+            # header row doesn't contain any <td> cells
+
+        # passenger trams has 4-digit numbers
+        if len(cells[0].text) == 4:
+            built = cells[3].text   # YYYY or mm.YYYY
+            year = built[-4:]       # drop month if exists
+            trams[year] = trams.get(year, 0) + 1
+
+    for year in sorted(trams):
+        print(year, trams[year], '#' * trams[year], sep='\t')
 
 
 if __name__ == '__main__':
