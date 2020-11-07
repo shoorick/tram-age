@@ -44,10 +44,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--type',
                         help='transportation type (1-9 or name, default value is tram)',
-                        default=1)
+                        default='1')
     parser.add_argument('-c', '--city',
                         help='number or name (Moscow is default city)',
-                        default=1)
+                        default='1')
     args = parser.parse_args()
 
     city = args.city
