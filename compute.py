@@ -44,14 +44,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--type',
                         help='transportation type (1-9 or name, default value is tram)',
-                        default='1')
+                        default='')
     parser.add_argument('-c', '--city',
                         help='number or name (Moscow is default city)',
-                        default='1')
+                        default='')
     args = parser.parse_args()
 
     city = args.city
-    if re.search(r'\D', city):
+    if not re.match(r'^\d+$', city):
         # try to guess id by name
         cities = config.get('cities')
 
@@ -75,7 +75,7 @@ def main():
         city = cities.get(city.lower(), cities['default'])
 
     kind = args.type
-    if re.search(r'\D', kind):
+    if not re.match(r'^\d+$', kind):
         kinds = config.get('types')
         kind = kinds.get(kind.lower(), kinds['default'])
 
