@@ -14,7 +14,21 @@ python3 -m venv env
 pip install lxml bs4 pyyaml transliterate
 ```
 
-## Samples
+## Usage
+
+```bash
+compute.py [-h] [-t TYPE] [-c CITY]
+```
+
+### Optional arguments
+
+* `-h`, `--help` — show help message and exit
+* `-t` _TYPE_, `--type` _TYPE_ — transportation type
+   (digit `1` to `9` or name, default value is tram)
+* `-c` _CITY_, `--city` _CITY_ — number or name
+   (default city is Moscow)
+
+## Examples
 
 It's possible to use digital IDs
 
