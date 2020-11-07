@@ -2,24 +2,27 @@
 cities:
     default:         1
     moscow:          1
-    москва:          1
     msk:             1
     мск:             1
+    питер:           2
+    спб:             2
+    spb:             2
     chelyabinsk:    54
-    челябинск:      54
     челяба:         54
     члб:            54
     ekaterinburg:   55
     yekaterinburg:  55
-    екатеринбург:   55
     екат:           55
     екб:            55
     ekb:            55
     ебург:          55
     е-бург:         55
     ёбург:          55
+    нск:            81
+    nsk:            81
+    тагил:         111
+    магнитка:      183
     miass:         229
-    миасс:         229
 
 types:
     default:        1
@@ -52,3 +55,7 @@ types:
     mover:          7
     maglev:         8
     'electic bus':  9
+
+url:
+    cities:     https://transphoto.org/country/1/
+    wagons:     https://transphoto.org/list.php

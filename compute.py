@@ -50,20 +50,31 @@ def main():
     args = parser.parse_args()
 
     city = args.city
-    if re.match(r'\D', city):
+    if re.search(r'\D', city):
         # try to guess id by name
         cities = config.get('cities')
+
+        # append dictionary of cities, read data from web
+        soup  = BeautifulSoup(get_content(config.get('url')['cities']), 'lxml')
+        table = soup.find('div', attrs={'class': 'p20w'})
+        links = table.find_all('a')
+
+        for link in links:
+            id = re.search(r'\d+', link.get('href'))
+            if id:
+                cities[link.text.lower()] = id.group(0)
+
         city = cities.get(city.lower(), cities['default'])
 
     kind = args.type
-    if re.match(r'\D', kind):
+    if re.search(r'\D', kind):
         kinds = config.get('types')
         kind = kinds.get(kind.lower(), kinds['default'])
 
     service = 0 # only for passengers
 
     url = urljoin(
-        'https://transphoto.org/list.php',
+        config.get('url')['wagons'],
         '?' + urlencode({'t': kind, 'cid': city, 'serv': service}))
 
     while url:
