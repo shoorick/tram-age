@@ -64,8 +64,13 @@ def main():
             city_name = link.text.lower()
             id = re.search(r'\d+', link.get('href'))
             if id:
-                cities[city_name] = id.group(0)
-                cities[translit(city_name, reversed=True)] = id.group(0)
+                city_id = id.group(0)
+                cities[city_name] = city_id
+                transliterated = translit(city_name, reversed=True)
+                cities[transliterated] = city_id
+
+                if 'j' in transliterated:
+                    cities[transliterated.replace('j', 'y')] = city_id
 
         city = cities.get(city.lower(), cities['default'])
 
