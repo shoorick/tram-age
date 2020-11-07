@@ -5,6 +5,7 @@ import urllib.request
 import yaml
 from urllib.parse import urljoin, urlencode
 from bs4 import BeautifulSoup
+from transliterate import translit
 
 """
 Check for version of Python and exit with error when version is older than 3
@@ -60,9 +61,11 @@ def main():
         links = table.find_all('a')
 
         for link in links:
+            city_name = link.text.lower()
             id = re.search(r'\d+', link.get('href'))
             if id:
-                cities[link.text.lower()] = id.group(0)
+                cities[city_name] = id.group(0)
+                cities[translit(city_name, reversed=True)] = id.group(0)
 
         city = cities.get(city.lower(), cities['default'])
 

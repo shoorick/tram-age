@@ -4,13 +4,16 @@ cities:
     moscow:          1
     msk:             1
     мск:             1
+    ленинград:       2
+    петербург:       2
+    петроград:       2
     питер:           2
+    'saint petersburg': 2
+    petersburg:      2
     спб:             2
     spb:             2
-    chelyabinsk:    54
     челяба:         54
     члб:            54
-    ekaterinburg:   55
     yekaterinburg:  55
     екат:           55
     екб:            55
@@ -22,7 +25,6 @@ cities:
     nsk:            81
     тагил:         111
     магнитка:      183
-    miass:         229
 
 types:
     default:        1
