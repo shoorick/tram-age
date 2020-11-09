@@ -8,7 +8,6 @@ This program fetches data for specified city and type of transportation and then
 ## Preparing
 
 ```bash
-sudo apt install pip3-venv
 make prepare
 ```
 
