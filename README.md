@@ -9,6 +9,13 @@ This program fetches data for specified city and type of transportation and then
 
 ```bash
 sudo apt install pip3-venv
+make prepare
+```
+
+or
+
+```bash
+sudo apt install pip3-venv
 python3 -m venv env
 . env/bin/activate
 pip install lxml bs4 pyyaml transliterate

@@ -9,11 +9,8 @@ help:
 $(CFG):
 	python3 -m venv $(ENV)
 
-activate: $(CFG)
-	. $(ENV)/bin/activate
-
-depencies: $(CFG)
-	pip3 install lxml bs4 pyyaml transliterate
-
-prepare: activate depencies
-	@echo 'Done'
+prepare: $(CFG)
+	( \
+		. $(ENV)/bin/activate; \
+		pip3 install lxml bs4 pyyaml transliterate; \
+	)
