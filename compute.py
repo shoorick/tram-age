@@ -18,14 +18,15 @@ def check_version():
 """
 Get content from specified URL
 """
-def get_content(url):
+def get_content(url, language):
     req = urllib.request.Request(
         url,
         data=None,
         headers={
             'User-Agent':
                 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 ' +
-                '(KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36'
+                '(KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36',
+            'Cookie': 'lang={}'.format(language)
         }
     )
 
@@ -42,13 +43,20 @@ def main():
         config = yaml.full_load(file)
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--city',
+                        help='number or name (default city is Moscow)',
+                        default='')
     parser.add_argument('-t', '--type',
                         help='transportation type (1-9 or name, default value is tram)',
                         default='')
-    parser.add_argument('-c', '--city',
-                        help='number or name (Moscow is default city)',
+    parser.add_argument('-l', '--language',
+                        help='ISO 639-1 language code (default is ru for Russian)',
                         default='')
     args = parser.parse_args()
+
+    language = args.language
+    lang = re.search(r'^([a-z]{2})', language)
+    language = lang.group(0) if lang else config.get('language');
 
     city = args.city
     if not re.match(r'^\d+$', city):
@@ -56,7 +64,7 @@ def main():
         cities = config.get('cities')
 
         # append dictionary of cities, read data from web
-        soup  = BeautifulSoup(get_content(config.get('url')['cities']), 'lxml')
+        soup  = BeautifulSoup(get_content(config.get('url')['cities'], language), 'lxml')
         table = soup.find('div', attrs={'class': 'p20w'})
         links = table.find_all('a')
 
@@ -66,11 +74,13 @@ def main():
             if id:
                 city_id = id.group(0)
                 cities[city_name] = city_id
-                transliterated = translit(city_name, reversed=True)
-                cities[transliterated] = city_id
 
-                if 'j' in transliterated:
-                    cities[transliterated.replace('j', 'y')] = city_id
+                if re.match(r'[А-ЯЁ]', city_name, re.I):
+                    transliterated = translit(city_name, reversed=True)
+                    cities[transliterated] = city_id
+
+                    if 'j' in transliterated:
+                        cities[transliterated.replace('j', 'y')] = city_id
 
         city = cities.get(city.lower(), cities['default'])
 
@@ -86,7 +96,7 @@ def main():
         '?' + urlencode({'t': kind, 'cid': city, 'serv': service}))
 
     while url:
-        soup = BeautifulSoup(get_content(url), 'lxml')
+        soup = BeautifulSoup(get_content(url, language), 'lxml')
 
         next_link = soup.find('a', attrs={'id': 'NextLink'})
         url = urljoin(url, next_link.get('href')) if next_link else None

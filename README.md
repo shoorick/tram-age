@@ -23,16 +23,19 @@ pip install lxml bs4 pyyaml transliterate
 ## Usage
 
 ```bash
-compute.py [-h] [-t TYPE] [-c CITY]
+compute.py [-h] [-c CITY] [-t TYPE] [-l LANGUAGE]
 ```
 
 ### Optional arguments
 
 * `-h`, `--help` — show help message and exit
-* `-t` _TYPE_, `--type` _TYPE_ — transportation type
-   (digit `1` to `9` or name, default value is tram)
 * `-c` _CITY_, `--city` _CITY_ — number or name
    (default city is Moscow)
+* `-t` _TYPE_, `--type` _TYPE_ — transportation type
+   (digit `1` to `9` or name, default value is tram)
+*  `-l` _LANGUAGE_, `--language` _LANGUAGE_ —
+   [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639-1)
+   language code (default is `ru` for Russian)
 
 ## Examples
 
@@ -64,9 +67,9 @@ Total     30
 or human readable names
 
 ```
-$ time python compute.py --city Ekb --type metro
-Екатеринбург, метрополитен
---------------------------
+$ python compute.py --city Ekb --type metro --language en
+Yekaterinburg, metro
+--------------------
 1988       6 ######
 1989      39 #######################################
 2011       8 ########
@@ -76,6 +79,10 @@ Total     61
 ```
 
 Names can be specified in English or in Russian.
+There are aliases for cities and types for example:
+* metro = metropolitain = subway = underground
+* tramway = tram = tm
+* SPb = Saint Petersburg = Petersburg
 
 ## See also
 
