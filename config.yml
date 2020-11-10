@@ -61,3 +61,5 @@ types:
 url:
     cities:     https://transphoto.org/country/1/
     wagons:     https://transphoto.org/list.php
+
+language: ru
