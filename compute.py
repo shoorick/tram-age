@@ -121,8 +121,13 @@ def main():
                     continue
                     # header row doesn't contain any <td> cells
 
-                built = cells[3].text   # YYYY or mm.YYYY
-                year = built[-4:]       # drop month if exists
+                built = cells[3].text   # YYYY, mm.YYYY or YYYY-mm
+                if built:
+                    matched = re.search(r'\d{4}', built)
+                    year = matched.group(0) if matched else ''
+                else:
+                    year = ''
+
                 trams[year] = trams.get(year, 0) + 1
                 total += 1
 
