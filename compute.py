@@ -35,6 +35,29 @@ def get_content(url, language):
     f = urllib.request.urlopen(req)
     return f.read().decode('utf-8')
 
+"""
+Parse command line arguments or print usage information
+"""
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Gather and process public transportation data from transphoto.org')
+    parser.add_argument('-c', '--city',
+                        help='number or name (default city is Moscow)',
+                        default='')
+    parser.add_argument('-t', '--type',
+                        help='transportation type (1-9 or name, default value is tram)',
+                        default='')
+    parser.add_argument('-l', '--language',
+                        dest='code',
+                        help='ISO 639-1 language code (default is ru for Russian)',
+                        default='')
+    parser.add_argument('-o', '--output',
+                        dest='file',
+                        help='output frequency table to file')
+    return parser.parse_args()
+
+"""
+Main function
+"""
 def main():
     check_version()
     years = []
@@ -44,19 +67,13 @@ def main():
     with open('config.yml') as file:
         config = yaml.full_load(file)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--city',
-                        help='number or name (default city is Moscow)',
-                        default='')
-    parser.add_argument('-t', '--type',
-                        help='transportation type (1-9 or name, default value is tram)',
-                        default='')
-    parser.add_argument('-l', '--language',
-                        help='ISO 639-1 language code (default is ru for Russian)',
-                        default='')
-    args = parser.parse_args()
+    """
+    Parse arguments
+    and search for appropriate codes of city and transportation type
+    """
+    args = parse_arguments()
 
-    language = args.language
+    language = args.code
     lang = re.search(r'^([a-z]{2})', language)
     language = lang.group(0) if lang else config.get('language');
 
@@ -90,6 +107,11 @@ def main():
     if not re.match(r'^\d+$', kind):
         kinds = config.get('types')
         kind = kinds.get(kind.lower(), kinds['default'])
+
+    output = args.file
+    if output and not re.search(r'\.(csv|html?|js(on)?|xlsx?)$', output, re.I):
+        sys.exit('Output file {} has unknown type. '
+            + 'Only CSV, HTML, and XSLX are available.\n'.format(output))
 
     service = 0 # only for passengers
 
@@ -130,15 +152,25 @@ def main():
                         years.append(int(matched.group(0)))
 
     if years:
-        print(title, '-' * len(title), sep='\n')
-
         series = pd.Series(years)
-        counts = pd.DataFrame({'year': series.value_counts()})
+        counts = pd.DataFrame({'count': series.value_counts()}).sort_index()
 
-        for year, count in counts['year'].sort_index().items():
-            print('{:<4}  {:>6} {}'.format(year, count, '#' * count))
+        if output:
+            if re.search(r'\.csv$', output, re.I):
+                counts.to_csv(output)
+            elif re.search(r'\.html?$', output, re.I):
+                counts.to_html(output)
+            elif re.search(r'\.js(on)?$', output, re.I):
+                counts.to_json(output)
+            elif re.search(r'\.xlsx?$', output, re.I):
+                counts.to_excel(output)
+        else:
+            print(title, '-' * len(title), sep='\n')
+            for year, count in counts['count'].items():
+                print('{:<4}  {:>6} {}'.format(year, count, '#' * count))
 
-        print('-' * 12) # year + gap + count
+            print('-' * 12) # year + gap + count
+
         print('Total {:>6}'.format(len(years)))
         print(
             'Mean: {:.5}, median: {:.5}, modes: {}'.format(

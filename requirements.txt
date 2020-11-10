@@ -1,0 +1,9 @@
+bs4
+lxml
+matplotlib
+numpy
+openpyxl
+pandas
+PyYAML
+transliterate
+xlwt
