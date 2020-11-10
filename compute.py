@@ -120,8 +120,8 @@ def main():
     if years:
         print(title, '-' * len(title), sep='\n')
 
-        df = pd.DataFrame(data={'built': years}, dtype=np.int16)
-        counts = pd.DataFrame({'year': df['built'].value_counts()})
+        series = pd.Series(years)
+        counts = pd.DataFrame({'year': series.value_counts()})
 
         for year, count in counts['year'].sort_index().items():
             print('{:<4}  {:>6} {}'.format(year, count, '#' * count))
@@ -129,9 +129,9 @@ def main():
         print('-' * 12) # year + gap + count
         print('Total {:>6}'.format(len(years)))
         print(
-            'Mean: {:.5}, median: {}'.format(
-                df.mean()['built'],
-                int(0.5 + df.quantile()['built']),
+            'Mean: {:.5}, median: {:.5}'.format(
+                series.mean(),
+                series.quantile(),
             )
         )
 
