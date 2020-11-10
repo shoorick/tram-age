@@ -35,15 +35,10 @@ def get_content(url, language):
     f = urllib.request.urlopen(req)
     return f.read().decode('utf-8')
 
-def main():
-    check_version()
-    years = []
-    total = 0
-    title = ''
-
-    with open('config.yml') as file:
-        config = yaml.full_load(file)
-
+"""
+Parse command line arguments or print usage information
+"""
+def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--city',
                         help='number or name (default city is Moscow)',
@@ -54,7 +49,21 @@ def main():
     parser.add_argument('-l', '--language',
                         help='ISO 639-1 language code (default is ru for Russian)',
                         default='')
-    args = parser.parse_args()
+    return parser.parse_args()
+
+"""
+Main function
+"""
+def main():
+    check_version()
+    years = []
+    total = 0
+    title = ''
+
+    with open('config.yml') as file:
+        config = yaml.full_load(file)
+
+    args = parse_arguments()
 
     language = args.language
     lang = re.search(r'^([a-z]{2})', language)
