@@ -5,7 +5,7 @@ CFG=$(ENV)/pyvenv.cfg
 help:
 	@echo Avalable goals:
 	@echo - help - print this message and exit
-	@echo - prepare - install depencies
+	@echo - prepare - install dependencies
 
 install-packages:
 	if [[ "$$(apt list --installed 2>/dev/null | grep -e '^python3-\(pip\|venv\)/' -c)" -lt "2" ]] ; then \
@@ -20,5 +20,5 @@ $(CFG) $(ENV): install-packages
 prepare: $(CFG)
 	( \
 		. $(ENV)/bin/activate; \
-		pip3 install lxml bs4 pyyaml transliterate; \
+		pip3 install lxml bs4 pyyaml transliterate numpy pandas; \
 	)

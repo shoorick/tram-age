@@ -17,7 +17,7 @@ or
 sudo apt install pip3-venv
 python3 -m venv env
 . env/bin/activate
-pip install lxml bs4 pyyaml transliterate
+pip install lxml bs4 pyyaml transliterate numpy pandas
 ```
 
 ## Usage

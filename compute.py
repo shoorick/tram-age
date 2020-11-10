@@ -1,4 +1,6 @@
 import argparse
+import numpy as np
+import pandas as pd
 import re
 import sys
 import urllib.request
@@ -35,7 +37,7 @@ def get_content(url, language):
 
 def main():
     check_version()
-    trams = {}
+    years = []
     total = 0
     title = ''
 
@@ -128,17 +130,26 @@ def main():
                 else:
                     year = ''
 
-                trams[year] = trams.get(year, 0) + 1
-                total += 1
+                years.append(int(year))
 
-    if trams:
+    if years:
         print(title, '-' * len(title), sep='\n')
 
-        for year in sorted(trams):
-            print('{:<4}  {:>6} {}'.format(year, trams[year], '#' * trams[year]))
+        series = pd.Series(years)
+        counts = pd.DataFrame({'year': series.value_counts()})
+
+        for year, count in counts['year'].sort_index().items():
+            print('{:<4}  {:>6} {}'.format(year, count, '#' * count))
 
         print('-' * 12) # year + gap + count
-        print('Total {:>6}'.format(total))
+        print('Total {:>6}'.format(len(years)))
+        print(
+            'Mean: {:.5}, median: {:.5}, modes: {}'.format(
+                series.mean(),
+                series.quantile(), # median
+                series.mode().to_list(),
+            )
+        )
 
     else:
         print('No data')
