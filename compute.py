@@ -129,9 +129,10 @@ def main():
         print('-' * 12) # year + gap + count
         print('Total {:>6}'.format(len(years)))
         print(
-            'Mean: {:.5}, median: {:.5}'.format(
+            'Mean: {:.5}, median: {:.5}, modes: {}'.format(
                 series.mean(),
-                series.quantile(),
+                series.quantile(), # median
+                series.mode().to_list(),
             )
         )
 
