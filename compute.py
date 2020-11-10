@@ -122,11 +122,8 @@ def main():
 
         df = pd.DataFrame(data={'built': years}, dtype=np.int16)
         counts = pd.DataFrame({'year': df['built'].value_counts()})
-        sorted = counts['year'].sort_index()
 
-        for i in range(0, sorted.count()):
-            year  = sorted.index[i]
-            count = sorted.iat[i]
+        for year, count in counts['year'].sort_index().items():
             print('{:<4}  {:>6} {}'.format(year, count, '#' * count))
 
         print('-' * 12) # year + gap + count
