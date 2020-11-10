@@ -128,9 +128,12 @@ def main():
 
         print('-' * 12) # year + gap + count
         print('Total {:>6}'.format(len(years)))
-        print('Mean: {:.5}, median: {}'.format(
-            df.mean()['built'],
-            int(0.5 + df.quantile()['built'])))
+        print(
+            'Mean: {:.5}, median: {}'.format(
+                df.mean()['built'],
+                int(0.5 + df.quantile()['built']),
+            )
+        )
 
     else:
         print('No data')
