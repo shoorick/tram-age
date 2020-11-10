@@ -9,6 +9,7 @@ This program fetches data for specified city and type of transportation and then
 
 ```bash
 make prepare
+. env/bin/activate
 ```
 
 or
@@ -17,7 +18,7 @@ or
 sudo apt install pip3-venv
 python3 -m venv env
 . env/bin/activate
-pip install lxml bs4 pyyaml transliterate numpy pandas openpyxl xlwt
+pip install -r requirements.txt
 ```
 
 ## Usage

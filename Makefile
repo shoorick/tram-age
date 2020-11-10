@@ -1,6 +1,7 @@
 SHELL=/bin/bash
 ENV=env
 CFG=$(ENV)/pyvenv.cfg
+REQ=requirements.txt
 
 help:
 	@echo Avalable goals:
@@ -17,8 +18,8 @@ install-packages:
 $(CFG) $(ENV): install-packages
 	python3 -m venv $(ENV)
 
-prepare: $(CFG)
+prepare: $(CFG) $(REQ)
 	( \
 		. $(ENV)/bin/activate; \
-		pip3 install lxml bs4 pyyaml transliterate numpy pandas openpyxl xlwt; \
+		pip3 install -r $(REQ); \
 	)
