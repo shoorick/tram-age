@@ -1,4 +1,6 @@
 import argparse
+import numpy as np
+import pandas as pd
 import re
 import sys
 import urllib.request
@@ -34,7 +36,7 @@ def get_content(url):
 
 def main():
     check_version()
-    trams = {}
+    years = []
     total = 0
     title = ''
 
@@ -113,17 +115,25 @@ def main():
 
                 built = cells[3].text   # YYYY or mm.YYYY
                 year = built[-4:]       # drop month if exists
-                trams[year] = trams.get(year, 0) + 1
-                total += 1
+                years.append(int(year))
 
-    if trams:
+    if years:
         print(title, '-' * len(title), sep='\n')
 
-        for year in sorted(trams):
-            print('{:<4}  {:>6} {}'.format(year, trams[year], '#' * trams[year]))
+        df = pd.DataFrame(data={'built': years}, dtype=np.int16)
+        counts = pd.DataFrame({'year': df['built'].value_counts()})
+        sorted = counts['year'].sort_index()
+
+        for i in range(0, sorted.count()):
+            year  = sorted.index[i]
+            count = sorted.iat[i]
+            print('{:<4}  {:>6} {}'.format(year, count, '#' * count))
 
         print('-' * 12) # year + gap + count
-        print('Total {:>6}'.format(total))
+        print('Total {:>6}'.format(len(years)))
+        print('Mean: {:.5}, median: {}'.format(
+            df.mean()['built'],
+            int(0.5 + df.quantile()['built'])))
 
     else:
         print('No data')
