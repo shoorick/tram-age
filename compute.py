@@ -126,11 +126,8 @@ def main():
                 built = cells[3].text   # YYYY, mm.YYYY or YYYY-mm
                 if built:
                     matched = re.search(r'\d{4}', built)
-                    year = matched.group(0) if matched else ''
-                else:
-                    year = ''
-
-                years.append(int(year))
+                    if matched:
+                        years.append(int(matched.group(0)))
 
     if years:
         print(title, '-' * len(title), sep='\n')
