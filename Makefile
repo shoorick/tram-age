@@ -20,5 +20,5 @@ $(CFG) $(ENV): install-packages
 prepare: $(CFG)
 	( \
 		. $(ENV)/bin/activate; \
-		pip3 install lxml bs4 pyyaml transliterate numpy pandas; \
+		pip3 install lxml bs4 pyyaml transliterate numpy pandas openpyxl xlwt; \
 	)
